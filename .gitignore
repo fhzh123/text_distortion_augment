@@ -9,3 +9,7 @@ tensorboard_runs/
 *.csv
 *.sh
 decision_boundary_toy_experiment/output/
+
+/experiment
+main2.py
+tmp.py

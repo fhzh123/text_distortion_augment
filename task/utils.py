@@ -161,6 +161,26 @@ def data_load(args):
         src_list['test'] = test_dat['comments'].tolist()
         src_list['test2'] = None
         trg_list['test'] = [0 for _ in range(len(test_dat))]
+
+    if args.data_name == 'GYAFC':
+        args.data_path = os.path.join(args.data_path,'GYAFC(E&M)')
+
+        with open(os.path.join(args.data_path, 'train/formal'), 'r',  encoding="utf-8") as fp:
+            src_list['train'] = fp.readlines()
+            src_list['train'] = list(map(lambda s: s.strip(), src_list['train']))
+        with open(os.path.join(args.data_path, 'train/informal'), 'r',  encoding="utf-8") as fp:
+            trg_list['train'] = fp.readlines()
+            trg_list['train'] = list(map(lambda s: s.strip(), trg_list['train']))
+
+        with open(os.path.join(args.data_path, 'test/formal'), 'r',  encoding="utf-8") as fp:
+            src_list['test'] = fp.readlines()
+            src_list['test'] = list(map(lambda s: s.strip(), src_list['test']))
+        with open(os.path.join(args.data_path, 'test/informal.ref0'), 'r',  encoding="utf-8") as fp:
+            trg_list['test'] = fp.readlines()
+            trg_list['test'] = list(map(lambda s: s.strip(), trg_list['test']))
+
+        assert len(src_list['train']) == len(trg_list['train'])
+        assert len(src_list['test']) == len(trg_list['test'])
         
     if args.data_name == 'rte':
         dataset = load_dataset("glue", args.data_name)
@@ -181,6 +201,8 @@ def data_load(args):
         trg_list['test'] = test_dat['label'].tolist()
             
     return src_list, trg_list
+
+    
 
 def data_sampling(args, src_list, trg_list):
 

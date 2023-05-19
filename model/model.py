@@ -76,6 +76,12 @@ class TransformerModel(nn.Module):
         self.classifier3 = nn.Linear(self.d_embedding, self.num_labels)
         self.gelu = nn.GELU()
 
+        ## Experiment
+        self.exp_classifier1 = nn.Linear(self.d_hidden, self.d_embedding)
+        self.exp_classifier2 = nn.Linear(self.d_embedding, self.d_embedding)
+        self.exp_classifier3 = nn.Linear(self.d_embedding, self.num_labels)
+        self.gelu = nn.GELU()
+
         # Augmenter Model Setting
         self.decoder = decoder
         self.decoder_linear = nn.Linear(self.d_hidden, self.d_embedding)
@@ -120,6 +126,17 @@ class TransformerModel(nn.Module):
         classifier_out = self.classifier3(classifier_out) # (batch_size, n_class)
 
         return classifier_out
+
+    def experiment_bart_classify(self, hidden_states):
+        if hidden_states.dim == 3:
+            hidden_states, _ = hidden_states.max(dim=1) 
+
+        classifier_out = self.dropout(self.gelu(self.exp_classifier1(hidden_states)))
+        classifier_out = self.dropout(self.gelu(self.exp_classifier2(classifier_out)))
+        classifier_out = self.classifier3(classifier_out)
+
+        return classifier_out
+
 
     def forward(self, input_ids, attention_mask, encoder_out, latent_out=None):
 

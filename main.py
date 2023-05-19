@@ -4,6 +4,8 @@ import time
 import argparse
 # Import custom modules
 from task.augmenter_training import augmenter_training
+from task.text_style_transfer import style_transfer_training
+from task.text_style_augmenting import style_transfer_augmenting
 from task.augmenting import augmenting
 from task.training import training
 from task.test_textattack import test_textattack
@@ -25,6 +27,12 @@ def main(args):
     if args.augmenter_training:
         augmenter_training(args)
 
+    if args.style_transfer:
+        style_transfer_training(args)
+
+    if args.style_transfer_augmenting:
+        style_transfer_augmenting(args)
+
     if args.augmenting:
         augmenting(args)
 
@@ -43,6 +51,8 @@ if __name__=='__main__':
     # Task setting
     parser.add_argument('--augmenter_training', action='store_true')
     parser.add_argument('--augmenting', action='store_true')
+    parser.add_argument('--style_transfer', action='store_true')
+    parser.add_argument('--style_transfer_augmenting', action='store_true')
     parser.add_argument('--training', action='store_true')
     parser.add_argument('--test_textattack', action='store_true')
     parser.add_argument('--resume', action='store_true')
@@ -173,7 +183,7 @@ if __name__=='__main__':
                         help='Print training process frequency; Default is 300')
     parser.add_argument('--print_example', default=True, type=str2bool,
                         help='Print augmented example; Default is True')
-    parser.add_argument('--sampling_ratio', default=0.2, type=float,
+    parser.add_argument('--sampling_ratio', default=0.1, type=float,
                         help='')
     args = parser.parse_args()
 
